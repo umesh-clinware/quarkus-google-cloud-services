@@ -1,11 +1,12 @@
 jdk:
   - openjdk21
 
-before_install:
-  - sdk install java 21.0.1-open || true
-  - sdk use java 21.0.1-open
-  - wget https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+install:
+  - echo "Installing Maven 3.9.6..."
+  - wget -q https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
   - tar -xzf apache-maven-3.9.6-bin.tar.gz
-  - export PATH=$PWD/apache-maven-3.9.6/bin:$PATH
+  - export M2_HOME=$PWD/apache-maven-3.9.6
+  - export PATH=$M2_HOME/bin:$PATH
   - mvn -version
+  - mvn clean install -DskipTests
 
