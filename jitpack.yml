@@ -8,6 +8,6 @@ install:
   - export M2_HOME=$PWD/apache-maven-3.9.6
   - export PATH=$M2_HOME/bin:$PATH
   - mvn -version
-  - echo "Building only BOM, Common, and Vertex AI modules (skipping Firebase devservices)..."
-  - mvn clean install -DskipTests -pl bom,common,vertx-ai -am
+  - echo "Building BOM, Common, and Vertex AI modules (including child modules)..."
+  - mvn clean install -DskipTests -pl bom,common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment -am
 
