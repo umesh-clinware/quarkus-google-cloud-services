@@ -52,14 +52,16 @@ jobs:
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
 
-      - name: Build and install BOM first
+      - name: Build and deploy to Artifact Registry
         run: |
-          # BOM must be installed locally first (chicken-and-egg with parent POM import)
-          mvn clean install -DskipTests -pl bom -N
+          # First: Build and install BOM locally (resolves circular parent->BOM dependency)
+          echo "Building BOM standalone..."
+          cd bom
+          mvn clean install -DskipTests
+          cd ..
           
-      - name: Deploy to Artifact Registry
-        run: |
-          # Now deploy BOM and required modules
+          # Second: Deploy BOM and all required modules
+          echo "Deploying to Artifact Registry..."
           mvn deploy -DskipTests \
             -pl bom,common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment \
             -am \

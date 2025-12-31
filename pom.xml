@@ -51,29 +51,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <!-- Google Cloud libraries BOM - provides versions for all Google Cloud SDKs -->
+      <!-- BOM provides version management for all modules -->
       <dependency>
-        <groupId>com.google.cloud</groupId>
-        <artifactId>libraries-bom</artifactId>
-        <version>26.61.0</version>
+        <groupId>io.quarkiverse.googlecloudservices</groupId>
+        <artifactId>quarkus-google-cloud-services-bom</artifactId>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <!-- Internal module versions for reactor build -->
-      <dependency>
-        <groupId>io.quarkiverse.googlecloudservices</groupId>
-        <artifactId>quarkus-google-cloud-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.quarkiverse.googlecloudservices</groupId>
-        <artifactId>quarkus-google-cloud-common-deployment</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.firebase</groupId>
-        <artifactId>firebase-admin</artifactId>
-        <version>9.7.0</version>
       </dependency>
       <dependency>
         <groupId>org.assertj</groupId>
