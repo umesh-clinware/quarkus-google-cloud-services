@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 env:
-  PROJECT_ID: clinware-brain-development
+  PROJECT_ID: clinware-shared  # Changed to match Cloud Build project
   REGION: us-central1
   REPOSITORY: quarkus-extensions
 
