@@ -37,6 +37,10 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Configure Maven for Artifact Registry
+        run: |
+          gcloud auth configure-maven --repository=https://${{ env.REGION }}-maven.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
+
       - name: Extract version from tag
         id: version
         run: |
@@ -52,20 +56,24 @@ jobs:
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
 
-      - name: Build and deploy to Artifact Registry
+      - name: Build and deploy BOM first
         run: |
-          # First: Build and install BOM locally (resolves circular parent->BOM dependency)
-          echo "Building BOM standalone..."
+          # Build BOM standalone (it has quarkiverse-parent, can build independently)
+          echo "Building and deploying BOM..."
           cd bom
-          mvn clean install -DskipTests
+          mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
+          mvn clean deploy -DskipTests \
+            -DaltDeploymentRepository=artifact-registry::default::artifactregistry://${{ env.REGION }}-maven.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
           cd ..
-          
-          # Second: Deploy BOM and all required modules
-          echo "Deploying to Artifact Registry..."
-          mvn deploy -DskipTests \
-            -pl bom,common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment \
+      
+      - name: Build and deploy remaining modules
+        run: |
+          # Now build other modules from root (BOM is already in local .m2 and Artifact Registry)
+          echo "Building and deploying remaining modules..."
+          mvn clean deploy -DskipTests \
+            -pl common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment \
             -am \
-            -DaltDeploymentRepository=artifact-registry::default::artifactregistry://us-central1-maven.pkg.dev/clinware-brain-development/quarkus-extensions
+            -DaltDeploymentRepository=artifact-registry::default::artifactregistry://${{ env.REGION }}-maven.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
 
       - name: Summary
         if: always()
