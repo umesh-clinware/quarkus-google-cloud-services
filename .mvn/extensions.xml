@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+    <!-- Google Artifact Registry Maven Wagon for deployment -->
+    <extension>
+        <groupId>com.google.cloud.artifactregistry</groupId>
+        <artifactId>artifactregistry-maven-wagon</artifactId>
+        <version>2.2.3</version>
+    </extension>
+</extensions>
+
