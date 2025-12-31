@@ -51,6 +51,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- BOM provides version management for all modules -->
       <dependency>
         <groupId>io.quarkiverse.googlecloudservices</groupId>
         <artifactId>quarkus-google-cloud-services-bom</artifactId>
