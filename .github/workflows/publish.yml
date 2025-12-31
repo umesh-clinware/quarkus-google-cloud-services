@@ -52,10 +52,15 @@ jobs:
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
 
-      - name: Build and publish to Artifact Registry
+      - name: Build and install BOM first
         run: |
-          # Build only the modules needed for Vertex AI
-          mvn clean deploy -DskipTests \
+          # BOM must be installed locally first (chicken-and-egg with parent POM import)
+          mvn clean install -DskipTests -pl bom -N
+          
+      - name: Deploy to Artifact Registry
+        run: |
+          # Now deploy BOM and required modules
+          mvn deploy -DskipTests \
             -pl bom,common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment \
             -am \
             -DaltDeploymentRepository=artifact-registry::default::artifactregistry://us-central1-maven.pkg.dev/clinware-brain-development/quarkus-extensions
