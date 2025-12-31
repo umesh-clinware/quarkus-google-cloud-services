@@ -37,9 +37,11 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Maven for Artifact Registry
+      - name: Verify authentication
         run: |
-          gcloud auth configure-maven --repository=https://${{ env.REGION }}-maven.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
+          echo "Authenticated as:"
+          gcloud auth list
+          echo "Project: ${{ env.PROJECT_ID }}"
 
       - name: Extract version from tag
         id: version
