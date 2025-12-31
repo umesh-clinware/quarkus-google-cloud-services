@@ -73,7 +73,7 @@ jobs:
           # Now build other modules from root (BOM is already in local .m2 and Artifact Registry)
           echo "Building and deploying remaining modules..."
           mvn clean deploy -DskipTests \
-            -pl common/runtime,common/deployment,vertx-ai/runtime,vertx-ai/deployment \
+            -pl common/runtime,common/deployment,common/grpc,vertx-ai/runtime,vertx-ai/deployment \
             -am \
             -DaltDeploymentRepository=artifact-registry::default::artifactregistry://${{ env.REGION }}-maven.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
 
